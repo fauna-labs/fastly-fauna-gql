@@ -1,0 +1,16 @@
+
+[dependencies]
+  fastly = "^0.8.0"
+  serde = { version = "^1", features = ["derive"] }
+
+[package]
+  authors = []
+  edition = "2018"
+  name = "fastly-fauna-gql"
+  publish = false
+  version = "0.1.0"
+
+[profile]
+
+  [profile.release]
+    debug = 1
