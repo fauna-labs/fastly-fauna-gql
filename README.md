@@ -16,7 +16,7 @@ including REST and non-REST interfaces such as GraphQL.
 [Fauna](https://docs.fauna.com/fauna/current/#driver-support) supports drivers in various languages
 but also includes a native [GraphQL](https://docs.fauna.com/fauna/current/api/graphql/) endpoint, 
 providing clients a platform agnostic means to interact with the database. 
-When working with [Rust](https://www.rust-lang.org/), it is best to do it through GraphQL. This
+When working with [Rust](https://www.rust-lang.org/) on Compute@Edge, it is best to do it through GraphQL. This
 project provides an example of how to implement a REST API using Compute@Edge using Fauna as the data backend.
 
 # Prerequisites
