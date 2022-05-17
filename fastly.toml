@@ -6,14 +6,17 @@ description = "A basic starter kit that demonstrates routing, simple synthetic r
 language = "rust"
 manifest_version = 2
 name = "fastly-fauna-gql"
-service_id = ""
+service_id = "3dkNIZu4EYHUmZy0gM89uA"
 
 [local_server]
+
   [local_server.backends]
+
     [local_server.backends.fauna_gql]
       url = "https://graphql.us.fauna.com"
 
   [local_server.dictionaries]
+
     [local_server.dictionaries.fauna_env]
       file = "env.json"
       format = "json"
