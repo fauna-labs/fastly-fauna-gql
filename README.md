@@ -1,11 +1,36 @@
+This repository contains unofficial patterns, sample code, or tools to help developers build more effectively with [Fauna][fauna]. All [Fauna Labs][fauna-labs] repositories are provided “as-is” and without support. By using this repository or its contents, you agree that this repository may never be officially supported and moved to the [Fauna organization][fauna-organization].
+
+[fauna]: https://www.fauna.com/
+[fauna-labs]: https://github.com/fauna-labs
+[fauna-organization]: https://github.com/fauna
+
+---
+
 # About
 *Generated from [Compute@Edge default starter kit for Rust](https://github.com/fastly/compute-starter-kit-rust-default)*
 
-[![Deploy to Fastly](https://deploy.edgecompute.app/button)](https://deploy.edgecompute.app/deploy)
+[Fastly Compute@Edge](https://www.fastly.com/products/edge-compute) allows you to respond to HTTP requests at the edge, 
+enabling you to implement RESTful APIs by stitching together results from different resources that have varying interfaces,
+including REST and non-REST interfaces such as GraphQL. 
+
+[Fauna](https://docs.fauna.com/fauna/current/#driver-support) supports drivers in various languages
+but also includes a native [GraphQL](https://docs.fauna.com/fauna/current/api/graphql/) endpoint, 
+providing clients a platform agnostic means to interact with the database. 
+When working with [Rust](https://www.rust-lang.org/), it is best to do it through GraphQL. This
+project provides an example of how to implement a REST API using Compute@Edge using Fauna as the data backend.
+
+# Prerequisites
+* [Fastly CLI](https://developer.fastly.com/reference/cli/)
 
 # Fauna Setup
-* Signup for a Free account and create an access key using [these steps](https://docs.fauna.com/fauna/current/learn/quick_start/client_quick_start).
-* ⚠️ Copy the key to a location where you can retrieve it for the next step, below.
+* Signup for a Free account and create an api key using 
+  [these steps](https://docs.fauna.com/fauna/current/learn/quick_start/client_quick_start).
+  * ⚠️ Copy the key to a location where you can retrieve it for later.
+* Create a database
+* Upload the included file [`/fauna/schema/fauna-fastly.gql`](/fauna/schema/) to the database using:
+  * [Fauna CLI](https://docs.fauna.com/fauna/current/build/integrations/shell/commands/upload-graphql-schema)
+    (See [installation](https://docs.fauna.com/fauna/current/build/integrations/shell/#installation))
+  * Or use the [UI](https://docs.fauna.com/fauna/current/learn/quick_start/gql_quick_start#import)
 
 # Local Quick Start
 * Rename `env.json.sample` to `env.json`
@@ -24,7 +49,7 @@
   >  | ------------ | -------------- |
   >  | Classic      | https://graphql.fauna.com/graphql |
   >  | US           | https://graphql.us.fauna.com/graphql |
-  >  | EU           | https://graphql.eufauna.com/graphql |
+  >  | EU           | https://graphql.eu.fauna.com/graphql |
 
 * Run locally:
   ```
@@ -32,13 +57,15 @@
   ```
 
 # Deploy
+[![Deploy to Fastly](https://deploy.edgecompute.app/button)](https://deploy.edgecompute.app/deploy)
+
 * Run `fastly compute publish` to create a new service:
   * When prompted for __backend__, enter one of the following depending on your Region Group
     | Region Group | Value to enter |
     | ------------ | -------------- |
     | Classic      | graphql.fauna.com |
     | US           | graphql.us.fauna.com |
-    | EU           | graphql.eufauna.com |
+    | EU           | graphql.eu.fauna.com |
   * When prompted for __Backend port number__ enter __443__
   * When prompted for __Backend name__ enter __fauna_gql__
   ```shell
@@ -85,7 +112,7 @@
 
   SUCCESS: Deployed package (service 3dkNIZu4EYHUmZy0gM89uA, version 1)
   ```
-* Add dictionary (note this creates a Draft version 2):
+* Add a dictionary so that we can store environment variables (note this creates a Draft version 2):
   ```shell
   $ fastly dictionary create --version=latest --name=fauna_env --autoclone                        
 
@@ -108,9 +135,9 @@
 
   SUCCESS: Created dictionary item key (service 3dkNIZu4EYHUmZy0gM89uA, dictionary 1ggKpT5AGcs55K3sX1126C)
   ```
-* Create dictionary entry for `key` as per the `env.json` file
+* Create dictionary entry for `key` as per the `env.json` file (Note: replace SECRET with your api key)
   ```shell
-  $ fastly dictionary-item create --dictionary-id=1ggKpT5AGcs55K3sX1126C --key=key --value=some-$3cret-123
+  $ fastly dictionary-item create --dictionary-id=1ggKpT5AGcs55K3sX1126C --key=key --value=SECRET
 
   SUCCESS: Created dictionary item key (service 3dkNIZu4EYHUmZy0gM89uA, dictionary 1ggKpT5AGcs55K3sX1126C)
   ```
