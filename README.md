@@ -56,8 +56,7 @@ project provides an example of how to implement a REST API using Compute@Edge us
   fastly compute serve
   ```
 
-# Deploy
-[![Deploy to Fastly](https://deploy.edgecompute.app/button)](https://deploy.edgecompute.app/deploy)
+# Deploy to Fastly
 
 * Run `fastly compute publish` to create a new service:
   * When prompted for __backend__, enter one of the following depending on your Region Group
