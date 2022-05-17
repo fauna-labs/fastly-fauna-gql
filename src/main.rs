@@ -1,3 +1,6 @@
+// Copyright Fauna, Inc.
+// SPDX-License-Identifier: MIT-0
+
 use fastly::Dictionary;
 use fastly::http::{header, Method, StatusCode};
 use fastly::{mime, Error, Request, Response};
@@ -20,13 +23,13 @@ fn main(mut req: Request) -> Result<Response, Error> {
       }
     };
 
-    // Copy the request body for later
-    let body = req.clone_with_body().into_body_str();
-
     // Parse out the request
-    let path: Vec<&str> = req.get_path().split("/").collect();
+    let copy = req.clone_without_body();
+    let path: Vec<&str> = copy.get_path().split("/").collect();
     let resource = path[1];
     let slug = if path.len() > 2 { path[2] } else { "" };
+    let mut single_product_response = true;
+    let mut response_code = StatusCode::OK;
 
     let gql = match (req.get_method(), resource, slug) {
       (&Method::GET, "", "") => {
@@ -38,6 +41,8 @@ fn main(mut req: Request) -> Result<Response, Error> {
 
       // Create a product
       (&Method::POST, "product", "") => {
+        response_code = StatusCode::CREATED;
+
         // Prepare the GraphQL query that includes a variable holding the request body
         let mut gql = r#"{
           "query": "mutation createProduct($product: ProductInput!) {
@@ -55,7 +60,7 @@ fn main(mut req: Request) -> Result<Response, Error> {
         }"#.to_string();
 
         // Now populate the variable
-        gql = gql.replace("$REQUEST_BODY", &body);
+        gql = gql.replace("$REQUEST_BODY", &req.into_body_str());
         gql
       }
 
@@ -109,12 +114,15 @@ fn main(mut req: Request) -> Result<Response, Error> {
 
         // Populate the variables
         gql = gql.replace("$PARAM_ID", slug);
-        gql = gql.replace("$REQUEST_BODY", &body);
+
+        gql = gql.replace("$REQUEST_BODY", &req.into_body_str());
         gql
       }
 
       // Delete the product by id
       (&Method::DELETE, "product", _) if slug != "" => {
+        response_code = StatusCode::NO_CONTENT;
+
         // The GraphQL query
         let mut gql = r#"{
           "query": "mutation DeleteProductById($id: ID!) {
@@ -138,7 +146,8 @@ fn main(mut req: Request) -> Result<Response, Error> {
 
       // get all products
       (&Method::GET, "product", "") => {
-        // The GraphQL query
+        single_product_response = false;
+
         r#"{
           "query": "query AllProducts {
             allProducts {
@@ -171,9 +180,10 @@ fn main(mut req: Request) -> Result<Response, Error> {
     let mut beresp = bereq.send(BACKEND_NAME)?;
 
     // Prepare the response
-    let mut resp = Response::new();
+    let mut resp = Response::new()
+        .with_status(response_code);
 
-    if slug != "" {
+    if single_product_response {
       // Deserialize the response body into SingleProductResponse
       let api_response = beresp.take_body_json::<SingleProductResponse>()?;
 
