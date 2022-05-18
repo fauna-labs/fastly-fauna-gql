@@ -32,13 +32,6 @@ fn main(mut req: Request) -> Result<Response, Error> {
     let mut response_code = StatusCode::OK;
 
     let gql = match (req.get_method(), resource, slug) {
-      (&Method::GET, "", "") => {
-        // Send a default synthetic response.
-        return Ok(Response::from_status(StatusCode::OK)
-          .with_content_type(mime::TEXT_HTML_UTF_8)
-          .with_body(include_str!("welcome-to-compute@edge.html")))
-      }
-
       // Create a product
       (&Method::POST, "product", "") => {
         response_code = StatusCode::CREATED;
