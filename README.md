@@ -67,7 +67,7 @@ project provides an example of how to implement a REST API with Compute@Edge usi
     | EU           | graphql.eu.fauna.com |
   * When prompted for __Backend port number__ enter __443__
   * When prompted for __Backend name__ enter __fauna_gql__
-  ```shell
+  ```
   $ fastly compute publish                                  
   ✓ Initializing...
   ✓ Verifying package manifest...
@@ -112,13 +112,13 @@ project provides an example of how to implement a REST API with Compute@Edge usi
   SUCCESS: Deployed package (service 3dkNIZu4EYHUmZy0gM89uA, version 1)
   ```
 * Add a dictionary so that we can store environment variables (note this creates a Draft version 2):
-  ```shell
+  ```
   $ fastly dictionary create --version=latest --name=fauna_env --autoclone                        
 
   SUCCESS: Created dictionary fauna_env (service 3dkNIZu4EYHUmZy0gM89uA version 2)
   ```
 * Get dictionary id:
-  ```shell
+  ```
   $ fastly dictionary list --version=latest
   Service ID: 3dkNIZu4EYHUmZy0gM89uA
   Version: 2
@@ -129,19 +129,19 @@ project provides an example of how to implement a REST API with Compute@Edge usi
   Last edited (UTC): 2022-05-17 17:27  
   ```
 * Create dictionary entry for `url` as per the `env.json` file (Note: use the `dictionary-id` from previous step)
-  ```shell
+  ```
   $ fastly dictionary-item create --dictionary-id=1ggKpT5AGcs55K3sX1126C --key=url --value=https://graphql.us.fauna.com/graphql
 
   SUCCESS: Created dictionary item key (service 3dkNIZu4EYHUmZy0gM89uA, dictionary 1ggKpT5AGcs55K3sX1126C)
   ```
 * Create dictionary entry for `key` as per the `env.json` file (Note: replace SECRET with your api key)
-  ```shell
+  ```
   $ fastly dictionary-item create --dictionary-id=1ggKpT5AGcs55K3sX1126C --key=key --value=SECRET
 
   SUCCESS: Created dictionary item key (service 3dkNIZu4EYHUmZy0gM89uA, dictionary 1ggKpT5AGcs55K3sX1126C)
   ```
 * Activate the service
-  ```shell
+  ```
   $ fastly compute publish
   ✓ Initializing...
   ✓ Verifying package manifest...
