@@ -64,6 +64,50 @@ and making GraphQL requests and deserializing its response content.
   fastly compute serve
   ```
 
+## Test the service
+Using your favorite API Client (e.g. Postman, curl, etc.) try some requests:
+
+* Create a product:
+  ```
+  $ curl --location --request POST 'http://127.0.0.1:7676/product' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+      "serialNumber": "000-131-3201-1",
+      "title": "Widget-131",
+      "weightLbs": 21.99,
+      "quantity": 3
+  }'
+
+  {"id":"332048167895826503","serialNumber":"000-131-3201-1","title":"Widget-131","weightLbs":21.99,"quantity":3}    
+  ```
+
+* Read a product by id:
+  ```
+  $ curl --location --request GET 'http://127.0.0.1:7676/product/332048167895826503'
+
+  {"id":"332048167895826503","serialNumber":"000-131-3201-1","title":"Widget-131","weightLbs":21.99,"quantity":3}%      
+  ```
+
+* Update a product by id:
+  ```
+  curl --location --request PUT 'http://127.0.0.1:7676/product/332048167895826503' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+      "serialNumber": "000-131-3201-100",
+      "title": "Widget-131-Prime",
+      "weightLbs": 121.99,
+      "quantity": 3
+  }'
+
+  {"id":"332048167895826503","serialNumber":"000-131-3201-100","title":"Widget-131-Prime","weightLbs":121.99,"quantity":3}      
+  ```
+
+* Delete a product by id:
+  ```
+  curl --location --request DELETE 'http://127.0.0.1:7676/product/332048167895826503'
+  ```
+
+
 # Deploy to Fastly
 
 * Run `fastly compute publish` to create a new service:
