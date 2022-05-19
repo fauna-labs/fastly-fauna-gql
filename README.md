@@ -9,6 +9,8 @@ This repository contains unofficial patterns, sample code, or tools to help deve
 # About
 *Generated from [Compute@Edge default starter kit for Rust](https://github.com/fastly/compute-starter-kit-rust-default)*
 
+This project provides an example of how to implement a REST API with Compute@Edge using Fauna as the data backend.
+
 [Fastly Compute@Edge](https://www.fastly.com/products/edge-compute) allows you to respond to HTTP requests at the edge, 
 enabling you to implement RESTful APIs by stitching together results from different resources that have varying interfaces,
 including REST and non-REST interfaces such as GraphQL. 
@@ -16,8 +18,14 @@ including REST and non-REST interfaces such as GraphQL.
 [Fauna](https://docs.fauna.com/fauna/current/#driver-support) supports drivers in various languages
 but also includes a native [GraphQL](https://docs.fauna.com/fauna/current/api/graphql/) endpoint, 
 providing clients a platform agnostic means to interact with the database. 
-When working with [Rust](https://www.rust-lang.org/) on Compute@Edge, it is best to do it through GraphQL. This
-project provides an example of how to implement a REST API with Compute@Edge using Fauna as the data backend.
+When working with [Rust](https://www.rust-lang.org/) on Compute@Edge, it is best to do it through GraphQL - 
+By simply authoring a GraphQL schema (found in this project [folder](/fauna/schema/)) and uploading it to Fauna,
+we automatically get CRUD without having to implement any queries or mutations of our own. 
+
+## Scope of project
+As there is little we need to do with Fauna, this sample's true focus is on working with Compute@Edge,
+learning patterns in using its Rust environment to parse HTTP requests and return custom responses,
+and making GraphQL requests and deserializing its response content.
 
 # Prerequisites
 * [Fastly CLI](https://developer.fastly.com/reference/cli/)
